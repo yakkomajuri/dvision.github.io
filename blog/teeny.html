@@ -34,16 +34,135 @@
         p {
             font-size: 18px;
         }
+
+        img {
+            max-width: 400px;
+            text-align: center;
+            margin: auto;
+            display: block;
+        }
     </style>
 </head>
-<body>
+<body data-theme="dark">
     <div class="back-btn">
         <a href="/">← Home</a>
     </div>
     <main class="container" id="page-content"><!-- template: blog -->
-
 <h1 id="why-i-built-my-own-static-site-generator">Why I built my own static site generator</h1>
-<p>WIP</p>
-</main>
+<details>
+
+<summary><b>TL;DR</b></summary>
+
+<br>
+
+<p>I really wanted to get a personal blog up quickly, but the most popular static site generators either didn't fit my needs or did way too much.</p>
+<p>As a result, I built <a href="https://github.com/yakkomajuri/teeny">Teeny</a>. </p>
+<p>It took me a couple hours, so it certainly isn't anything amazing, but if you want to try it, you can do:</p>
+<pre><code>npm i -g teeny
+teeny init &amp;&amp; teeny develop
+</code></pre>
+</details>
+
+<details open="">
+
+<summary><b>The backstory</b></summary>
+
+<br>
+
+<p>The website you're currently on was built using a static site generator called <a href="https://github.com/yakkomajuri/teeny">Teeny</a>.</p>
+<p>Until yesterday, Teeny wasn't even an idea. It didn't exist at all, not even in my mind.</p>
+<p>You see, for a long time I've been wanting to launch a personal blog. </p>
+<p>I used to be a <a href="https://yakkomajuri.medium.com/">regular writer of technical content</a> (which I unfortunately don't find a lot of time for these days), but I was yearning for a home to publish more unpolished, personal, "stream of consciousness" pieces.</p>
+<p>I love writing, and just want to have something to motivate me to keep on doing it, even if nobody's reading.</p>
+<p>The problem is, I suffer from a condition most programmers are awfully familiar with: a knack for adding more and more scope to side projects, to the point where they get dropped and never see the light of day.</p>
+<p>On so many weekends I started building a blog using all the right tools and technologies, writing clean code, making it "spark joy", and then got to Sunday evening with yet another repo in hand that I'd never revisit.</p>
+<p>So a few weeks ago, I broke the cycle. I published this:</p>
+<p><img src="./img/teeny/website.png" alt="Blog v1"></p>
+<p>It was a poorly-coded ugly thing written in vanilla HTML. But it was much better than everything else for a simple reason: it went live.</p>
+<p>This was a great start, but, unfortunately, it did lack the one thing I'd want for my blog: the ability to write in Markdown.</p>
+<p>Markdown is the best thing since sliced bread, so my blog could suck, but it better be able to parse Markdown.</p>
+<p>So I turned to Jekyll. Jekyll is natively supported by GitHub Pages, and with a few clicks in the GitHub UI you're all up and running.</p>
+<p>This was nice, but I lost the flexibility I would have wanted to customize the pages a bit - GitHub let's you pick a theme and that's that.</p>
+<p>This was a result of the native integration with GitHub pages - if I had set Jekyll up myself I'd have had the control I needed. But I'm not a big fan of Ruby tools, so I scrapped that idea.</p>
+<p>So, once again, I turned to a tool I'm actually reasonably familiar with: Gatsby.</p>
+<p>Gatsby is great, and I've worked with it quite a bit. </p>
+<p>At PostHog, <a href="https://github.com/PostHog/posthog.com">our website is built with Gatsby</a>, and I've leveraged a lot of Gatsby's tooling (including the "lower level" stuff) to get things done when I was working on it.</p>
+<p>This should be my comfort zone.</p>
+<p>I went on the Gatsby website, picked a theme, and went to work. And right away, the problem was clear: it was too much.</p>
+<p>Beyond all the extra stuff Gatsby ships with, a lot of Gatsby blog themes try to make things "easier" for you by abstracting away the internals and exposing a <code>config.js</code> file, where you add your name, a bio, some links, and Gatsby does the rest. </p>
+<p>But that comes at a cost. And that cost was made clear by me hunting the favicon file in the directory for a while only to find that some plugin auto-generated it based on a path for a profile photo you could set in the config.</p>
+<p>I really don't need all of this.</p>
+<p>And thus, back to square one.</p>
+<p>At this stage, the options were: spend a little bit of time doing some research and probably find a tool that would suit me, or build a tool myself to do exactly what I needed and nothing more.</p>
+<p>You already know what happened.</p>
+</details>
+
+
+<details open="">
+<summary><b>Introducing Teeny</b></summary>
+
+<br>
+
+<p>Teeny is a super simple static site generator built to suit my needs and my needs only. </p>
+<p>All it does is generate pages based on HTML templates and Markdown content.</p>
+<p>It does very little and is strongly opinionated (<em>read: I was too lazy to build customization/conditional handlers</em>), but has allowed me to build a blog I'm happy with extremely quickly.</p>
+<p>Essentially, there are really only 2 concepts you need to think about: templates and pages.</p>
+<p><strong>Templates</strong></p>
+<p>Templates are plain HTML and should be added to a <code>templates/</code> subdirectory. </p>
+<p>They can contain an element with the id <code>page-content</code>, which is where Teeny adds the HTML generated by parsing the Markdown content.</p>
+<p><strong>Pages</strong></p>
+<p>Markdown is a first-class citizen in Teeny, so all of your website's pages are defined by a Markdown file. </p>
+<p>The file need not have any actual content though, so if you want a page to be defined purely in HTML you just need to create a template that is referenced from a page file.</p>
+<p>To specify what template a page should use, you add an HTML comment on the first line of the page file, like so:</p>
+<pre><code>&lt;!-- template: blog --&gt;
+</code></pre>
+<p>In the above example, Teeny will look for a template called <code>blog.html</code>. If no template is specified, Teeny looks for a <code>default.html</code> file in <code>templates/</code> and uses that.</p>
+<hr><br>
+
+<p>Here's an example of Teeny at work.</p>
+<blockquote>
+<p><strong>Side note:</strong> Teeny is made of poorly-tested code I wrote in between a trip to the movies and a basketball game. <strong>But</strong>, if you want to try it, you can install it with <code>npm i -g teeny</code> or <code>yarn global add teeny</code>. The code is available <a href="https://github.com/yakkomajuri/teeny">here</a>.</p>
+</blockquote>
+<p>To start a Teeny project, run <code>teeny init</code>. This will create the following in your current directory:</p>
+<pre><code>.
+├── pages
+│&nbsp;&nbsp; └── index.md
+├── static
+│&nbsp;&nbsp; └── main.js
+└── templates
+    ├── default.html
+    └── homepage.html
+</code></pre>
+<p>If you then run <code>teeny build</code>, you'll end up with this:</p>
+<pre><code>.
+├── pages
+│&nbsp;&nbsp; └── index.md
+├── public
+│&nbsp;&nbsp; ├── index.html
+│&nbsp;&nbsp; └── main.js
+├── static
+│&nbsp;&nbsp; └── main.js
+└── templates
+    ├── default.html
+    └── homepage.html
+</code></pre>
+<p><code>index.md</code> uses the <code>homepage</code> template, and together they generate <code>index.html</code>. As is standard with other SSGs, static files are served from <code>public/</code>. </p>
+<p>You'll also notice <code>main.js</code> got moved to <code>public/</code> too. Teeny will actually take all non-template and non-page files from <code>pages/</code>, <code>templates/</code>, and <code>static/</code> and copy them to <code>public/</code>, following the same structure from the origin directory.</p>
+<p>The reason for this is that I actually didn't want to have "magic" imports, where you have to import static assets from paths that do not correspond to the actual directory structure. As a result, I decided that static files would just live inside <code>templates/</code> and <code>pages/</code> as necessary. </p>
+<p>Later I did surrender to the <code>static/</code> directory approach though, as there may be assets both pages and templates want to use. Imports from <code>static/</code> are "magic", meaning you need to think about the output of <code>teeny build</code> for them to work.</p>
+<p>The last command that Teeny supports is <code>teeny develop</code>. This creates an HTTP server to server files from the <code>public/</code> subdirectory. </p>
+<p>It listens for changes to the files and updates the static files on the fly (naively, by just rebuilding everything each time it detects a change).</p>
+</details>
+
+<details open="">
+
+<summary><b>The final touches</b></summary>
+
+<br>
+
+<p>Once I finished building Teeny, it took me very little time to get this blog up and running. </p>
+<p>I slapped <a href="https://picocss.com/docs/">Pico.css</a> on my templates, making the site instantly look 100x better (big shoutout to them, I love it), and to deploy a new version I just run <code>teeny build &amp;&amp; gh-pages -d public/</code>.</p>
+<p>And that's all - that's how I got this blog all sorted in about half a day. </p>
+</details></main>
 
 </body></html>
