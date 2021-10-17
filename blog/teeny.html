@@ -99,8 +99,7 @@
     <div class="back-btn">
       <a href="/">← Home</a>
     </div>
-    <main class="container" id="page-content"><!-- template: blog -->
-<h1 id="why-i-built-my-own-static-site-generator">Why I built my own static site generator</h1>
+    <main class="container" id="page-content"><h1 id="why-i-built-my-own-static-site-generator">Why I built my own static site generator</h1>
 <details>
 
 <summary><b>TL;DR</b></summary>
@@ -165,7 +164,7 @@ teeny init &amp;&amp; teeny develop
 <p><strong>Pages</strong></p>
 <p>Markdown is a first-class citizen in Teeny, so all of your website's pages are defined by a Markdown file. </p>
 <p>The file need not have any actual content though, so if you want a page to be defined purely in HTML you just need to create a template that is referenced from a page file.</p>
-<p>To specify what template a page should use, you add an HTML comment on the first line of the page file, like so:</p>
+<p>To specify what template a page should use, you add an HTML comment on the first line of the page file¹, like so:</p>
 <pre><code>&lt;!-- template: blog --&gt;
 </code></pre>
 <p>In the above example, Teeny will look for a template called <code>blog.html</code>. If no template is specified, Teeny looks for a <code>default.html</code> file in <code>templates/</code> and uses that.</p>
@@ -217,6 +216,17 @@ teeny init &amp;&amp; teeny develop
 <pre><code>teeny build &amp;&amp; gh-pages -d public/
 </code></pre>
 <p>And that's all - that's how I got this blog all sorted out in about half a day. </p>
+</details>
+
+
+
+<details>
+
+<summary><b>Footnotes</b></summary>
+
+<br>
+
+<p><strong>[1]:</strong> This has since changed. Teeny now uses a frontmatter to specify page templates. Check out <a href="https://github.com/yakkomajuri/teeny#readme">Teeny's README</a> for more details. And shoutout to HackerNews user <a href="https://news.ycombinator.com/user?id=franciscop">franciscop</a> for the suggestion.</p>
 </details></main>
   
 
