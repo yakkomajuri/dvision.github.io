@@ -1,0 +1,134 @@
+<html lang="en" data-theme="dark"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be careful with Heroku Postgres</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+      h1 {
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 20;
+        top: 20;
+      }
+
+      blockquote {
+        padding: 0px 10px;
+      }
+
+      code {
+        color: #a5cce6;
+      }
+
+      pre code {
+        color: #bfd4e2;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      img {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+        display: block;
+      }
+
+      .column {
+        float: left;
+        padding: 5px;
+      }
+
+      .img-gallery-2 .column {
+        width: 50%;
+      }
+      
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+    </style>
+
+    <script>
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                p,
+                r
+              );
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("Tom1k0Lh0sRN7EK8LIlU5mbbmAHMBSk37lc02ZQ__38", {
+        api_host: "https://app.posthog.com",
+      });
+    </script>
+  </head>
+  <body>
+    <div class="back-btn">
+      <a href="/">← Home</a>
+    </div>
+    <main class="container" id="page-content"><h1 id="be-careful-with-heroku-postgres">Be careful with Heroku Postgres</h1>
+<p>This will be a short one. Just a quick <em>lil'</em> rant.</p>
+<p>Heroku is a great platform for starting out a project. You can get up and running quickly, and it's extremely easy to add in valuable services (via Heroku add-ons) as well as scaling up and down.</p>
+<p>As a result, it's often a good pick for early-stage startups. A lot of the architecture woes are handled for you, so you can spend more time on your product, and still scale fast if you happen to hit the front page of HackerNews or something.</p>
+<p>Now, at some point, if things start going very well, you might outgrow Heroku. There's a lot of reasons for this which I won't discuss here. Thus, you'll need to migrate your infrastructure somewhere else like, say, AWS.</p>
+<p>For most services, this will be reasonably easy (as far as migrating infrastructure goes). However, if you happen to be using Heroku Postgres, good luck.</p>
+<p>From their own <a href="https://help.heroku.com/E10ZZ6IJ/why-can-t-i-use-third-party-tools-to-replicate-my-heroku-postgres-database-to-a-non-heroku-database">"Help" section</a>:</p>
+<blockquote>
+<p>"Heroku Postgres does not give customers access to the superuser role, or allow customers to grant other users the replication role, due to these roles being very privileged".</p>
+</blockquote>
+<p>So yeah, all these services out there to help you replicate a Postgres instance are out of bounds. Forget hooking Amazon DMS or Debezium to your database and letting it do the heavy lifting.</p>
+<p>The one way to bulk export data is the built-in <a href="https://devcenter.heroku.com/articles/heroku-postgres-backups">Heroku PGBackups feature</a>, but that can be pretty slow for a large DB, meaning it will probably be extremely out of sync by the time you load the data into your new instance.</p>
+<p>Ultimately, it's a hassle that can be overcome, but not without some annoyance and extra work on your end. </p>
+<p>So Heroku, please, just let me be a superuser on my database.</p>
+</main>
+  
+
+</body></html>
