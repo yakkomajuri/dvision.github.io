@@ -1,0 +1,166 @@
+<html lang="en" data-theme="dark"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging Debrief #1: Recovering a customer's events</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+      h1 {
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 20;
+        top: 20;
+      }
+
+      blockquote {
+        padding: 0px 10px;
+      }
+
+      code {
+        color: #a5cce6;
+      }
+
+      pre code {
+        color: #bfd4e2;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      img {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+        display: block;
+      }
+
+      .column {
+        float: left;
+        padding: 5px;
+      }
+
+      .img-gallery-2 .column {
+        width: 50%;
+      }
+      
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+    </style>
+
+    <script>
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                p,
+                r
+              );
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("Tom1k0Lh0sRN7EK8LIlU5mbbmAHMBSk37lc02ZQ__38", {
+        api_host: "https://app.posthog.com",
+      });
+    </script>
+  </head>
+  <body>
+    <div class="back-btn">
+      <a href="/">← Home</a>
+    </div>
+    <main class="container" id="page-content"><h1 id="debugging-debrief-1-recovering-a-customers-events">Debugging Debrief #1: Recovering a customer's events</h1>
+<blockquote>
+<p><small>This piece is a part of my <em>Debugging Debrief</em> series, which includes writeups of tracking down and fixing bugs. My goal is that this series motivates me to write about software more often, so I can kick back into the habit, reinforce my learnings through the writing, and refer back to these posts in the future.</small></p>
+</blockquote>
+<p>Here's a short post of a recent occurence just to get things started. Hopefully I'll cover some nastier stuff in upcoming pieces.</p>
+<p>Just the other day I had a session booked in my calendar that was gearing up to be painful.</p>
+<p>A customer who deployed our software had found out an important piece of their instance had started having some issues <em>a while back</em>, so they hadn't ingested any events (data) for about a month. </p>
+<p>Leaving aside the details regarding why this happened and why it wasn't noticed earlier, what then happened is that we realized the customer still had a good amount of the data in Kafka (~10 days worth) and they wanted to restore it.</p>
+<p>Enter me. I was the one who would help them restore this data - meaning I'd jump on a call with an engineer from their side and figure this out.</p>
+<p>The reason this is painful is that you can't just move fast and run commands yourself to try things out. You have to convey to the person on the other side of the screen, accurately, what should be done next. </p>
+<p>"Now run '<em>cube control config use context</em>'. Oh sorry, that's '<em>use context</em>' with an underscore, I mean dash. Argh!"</p>
+<p>Anyway, we got started and the approach seemed clear. </p>
+<p>For anyone else that is not future me reading this post, I'll provide just a bit of context.</p>
+<p>Our product runs two key servers. The first one I'll call the Django server, and the second is called the plugin server.</p>
+<p>The plugin server, however, is not just that. In reality, it's more like "the ingestion server". So, to ingest data, an endpoint is hit on the Django server, which does a bit of validation on the payload, and then pops it into Kafka.</p>
+<p>The plugin server then picks up the event (payload), does some processing on it, updates state where relevant, and pops the event <em>back</em> into Kafka, where it's consumed by ClickHouse (our database) using a Kafka engine.</p>
+<p>Diagramatically:</p>
+<pre><code># flow of an event through the system
+-&gt; django server -&gt; kafka (topic 1) -&gt; plugin server -&gt; kafka (topic 2) -&gt; clickhouse
+</code></pre>
+<p>So, what happened to the customer is that their plugin server had ran into a bug, so the data we had to restore was from 'topic 1' in the diagram above.</p>
+<p>Someone else from our team had originally touched base first, and suggested that they dump the Kafka data somewhere safe from eviction by Kafka's retention policy.</p>
+<p>Thus, today, we'd recover that data.</p>
+<p>The approach was to just produce the data again to topic 1, and our system would just process it correctly from there.</p>
+<p>We get started and the engineer shows me the data dump. The messages were there intact, but the file also included a bunch of metadata, structured in a format that's great for humans to read, but not great to easily pipe into a Kafka producer.</p>
+<p>As such, we spent some time writing up a regex to clean it up (note to self: get better at this), until we had got the file to a point where it was in a JSONL format.</p>
+<p>The engineer's tool of choice for dealing with Kafka was <code>kafkacat</code>, and a brief scan of their docs showed me that if we had a JSONL file, <code>kafkacat</code> would produce messages from that data with ease.</p>
+<p>Having gotten the file formatted how we wanted it, we scanned it through and found no issues, so we proceeded to produce the messages through <code>kafkacat</code> connected to the Kafka service via k8s port forwarding.</p>
+<p>Looking good, looking good. Bam!</p>
+<p><em>Unexpected end of JSON input!</em></p>
+<p>The plugin server crashed.</p>
+<p>We scale the plugins service pod down and up again, and it crashes once more.</p>
+<p>This is strange - the plugin server does a lot in worker threads, and an exception thrown in those wouldn't normally cause the server to crash. It also generally has pretty good error handling. Plus, why can't it even start up again?</p>
+<p>Making a short story shorter, turns out exactly <em>one</em> of the JSON payloads was invalid, and the plugin server runs the Kafka consumer in the main thread, from where it distributes the ingestion work to the workers. </p>
+<p>And while this is a service that's reasonably resilient, it didn't handle the case where a payload from Kafka contained invalid JSON. This is usually fine because that topic is only produced to from the Django server, which <em>does do</em> JSON validation. However, when one produces to the topic directly, that validation is bypassed.</p>
+<p>So now the Kafka topic is poisoned, and the plugin server won't start back up, since it can't commit the offset for the consumer group, and tries to consume the same message each time it starts up.</p>
+<p>Ultimately, we found the invalid payload with a little Python script, and exec'd into the Kafka pod to manually move the consumer group offset forward.</p>
+<p>With the offset now beyond the broken payload, the service got healthy again, and we were able to produce the data with no problems. </p>
+<p>Any potential duplicates produced would be handled by the table engine and collapsed appropriately based on the payload UUIDs.</p>
+<p>That was that. The customer got their data back and we moved on with our days.</p>
+<hr>
+<p>Lessons:</p>
+<ul>
+<li>Get better at regex</li>
+<li>Always add handling for invalid payloads</li>
+</ul>
+</main>
+  
+
+</body></html>
