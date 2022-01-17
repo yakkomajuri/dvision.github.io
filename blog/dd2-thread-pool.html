@@ -216,6 +216,8 @@
 <p>The reason this works is because on our Cloud instance, where performance is paramount, most of the time workers will get a new task in fractions of a second, so the absolute vast majority of tasks will be picked up using the fast mechanism.</p>
 <p>However, on self-hosted instances processing low volumes, if workers are already taking e.g. 5 seconds to get a new task, the load on the instance is so little that the performance hit won't be problematic, since it is unlikely it will lead to a long backlog of tasks.</p>
 <p>And so, that's how we kept our performance intact without touching the voided promises.</p>
+<hr>
+<p><em><a href="https://github.com/PostHog/plugin-server/issues/487">Here's the original ticket</a> where this was explained and a discussion about possibilities took place</em>.</p>
 </main>
   
 
