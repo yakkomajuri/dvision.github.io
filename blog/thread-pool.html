@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debugging Debrief #2: Deep diving into the thread pool</title>
+    <title>Deep diving into the thread pool</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     <style>
       h1 {
@@ -114,10 +114,7 @@
     <div class="back-btn">
       <a href="/">← Home</a>
     </div>
-    <main class="container" id="page-content"><h1 id="debugging-debrief-2-deep-diving-into-the-thread-pool">Debugging Debrief #2: Deep diving into the thread pool</h1>
-<blockquote>
-<p><small>This piece is a part of my <em>Debugging Debrief</em> series, which includes writeups of tracking down and fixing bugs. My goal is that this series motivates me to write about software more often, so I can kick back into the habit, reinforce my learnings through the writing, and refer back to these posts in the future.</small></p>
-</blockquote>
+    <main class="container" id="page-content"><h1 id="deep-diving-into-the-thread-pool">Deep diving into the thread pool</h1>
 <p>Some months ago I found myself with the following issue in my sprint priorities:</p>
 <p><a href="https://github.com/PostHog/bigquery-plugin/issues/10">"BigQuery is very flakey on local / self-hosted"</a></p>
 <p>Keeping context to a minimum, we run an open source analytics platform that you can self-host, and there are plugins to help you send data out of the platform and into other tools, of which BigQuery is one of them.</p>
