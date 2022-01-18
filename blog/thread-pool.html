@@ -210,7 +210,11 @@
 <p>The first attempt was very straightforward. Piscina provides a <code>useAtomics</code> flag that can be used to disable the blocking mechanism instead of the slower approach of waiting for the signal denoting a new message. </p>
 <p>Upon benchmarking this with our system, however, I found that our event ingestion rate <a href="https://github.com/PostHog/plugin-server/issues/487#issuecomment-870509629">slowed down by around 27%</a> when <code>useAtomics</code> was set to <code>false</code>. This is an unacceptable performance drop, so we scrapped the idea.</p>
 <p>Thus, after toying with a few other ideas, we landed on the following (note that we were already running a <em>fork</em> of Piscina):</p>
-<p><strong>Introduce a setting denoting a maximum amount of time a worker should block the event loop while looking for tasks before falling back into the slower mechanism, defaulting it to 5 seconds. (<a href="https://github.com/PostHog/piscina/pull/4">Implementation</a>)</strong> </p>
+<p><strong>Introduce a setting denoting a maximum amount of time a worker should block the event loop while looking for tasks before falling back into the slower mechanism. (<a href="https://github.com/PostHog/piscina/pull/4">Implementation</a>)</strong> </p>
+<p>Sensible defaults were then set for our Cloud and self-hosted instances (originally 1s and 5s respectively).</p>
+<blockquote>
+<p><em>Note that we've forked Piscina in order to tailor it to our very specific needs. This isn't a general solution but was a good fit for us.</em></p>
+</blockquote>
 <p>The reason this works is because on our Cloud instance, where performance is paramount, most of the time workers will get a new task in fractions of a second, so the absolute vast majority of tasks will be picked up using the fast mechanism.</p>
 <p>However, on self-hosted instances processing low volumes, if workers are already taking e.g. 5 seconds to get a new task, the load on the instance is so little that the performance hit won't be problematic, since it is unlikely it will lead to a long backlog of tasks.</p>
 <p>And so, that's how we kept our performance intact without touching the voided promises.</p>
