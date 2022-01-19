@@ -1,0 +1,142 @@
+<html lang="en" data-theme="dark"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can you tell me the age of my users?</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+      h1 {
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 20;
+        top: 20;
+      }
+
+      blockquote {
+        padding: 0px 10px;
+      }
+
+      code {
+        color: #a5cce6;
+      }
+
+      pre code {
+        color: #bfd4e2;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      img {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+        display: block;
+      }
+
+      .column {
+        float: left;
+        padding: 5px;
+      }
+
+      .img-gallery-2 .column {
+        width: 50%;
+      }
+      
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+    </style>
+
+    <script>
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                p,
+                r
+              );
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("Tom1k0Lh0sRN7EK8LIlU5mbbmAHMBSk37lc02ZQ__38", {
+        api_host: "https://app.posthog.com",
+      });
+    </script>
+  </head>
+  <body>
+    <div class="back-btn">
+      <a href="/">← Home</a>
+    </div>
+    <main class="container" id="page-content"><h1 id="can-you-tell-me-the-age-of-my-users">Can you tell me the age of my users?</h1>
+<p>I once had an onboarding call with a client where I was asked:</p>
+<blockquote>
+<p><em>"Can you tell me the age of my users?"</em></p>
+</blockquote>
+<p>I'm an engineer at an analytics company, and upon getting asked that question I was immediately taken aback.</p>
+<p>It sounded like such a stupid question - how could we possibly infer that?</p>
+<p>And then it clicked: this client was migrating off of Google Analytics.</p>
+<p>You see, Google <em>can</em> and <em>does</em> provide age information in their analytics dashboard.</p>
+<p>They can do that because countless websites across the world use Google Analytics and even more people use Google services.</p>
+<p>Google can then cross-reference all the data they get and spit out a reasonably accurate guess as to the age of the users that go to your website.</p>
+<p>Not only that - Google is not an analytics company. They're an ads company. </p>
+<p>So the same model of your users from which they derive some of the information that appears on your dashboard is used to do very targeted advertising all across the web.</p>
+<p>And that's ultimately the problem with Google Analytics particularly. </p>
+<p>We can discuss the nuances of GDPR, sending data to servers in other countries, etc.</p>
+<p>But at the end of the day, the biggest problem with Google Analytics is that it is a service provided by a company whose end product is <em>not</em> analytics.</p>
+<p>So, from a user privacy perspective, you're probably better off with a company that provides analytics as their core product, however that's done.</p>
+<hr>
+<br>
+
+<p><em>Please note that I'm a very biased source. I work for PostHog, a company that isn't a direct competitor to Google Analytics per se, but also kind of is.</em></p>
+<p><em>But my argument here is that, as long as you're compliant with local laws, you could switch to a cloud-based service like Mixpanel or Amplitude and it'd still be an improvement. Even though, as you'd expect, I'm an advocate for self-hosted analytics.</em></p>
+</main>
+  
+
+</body></html>
