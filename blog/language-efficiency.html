@@ -1,0 +1,723 @@
+<html lang="en" data-theme="dark"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's the world's most efficient language?</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+      h1 {
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 20;
+        top: 20;
+      }
+
+      blockquote {
+        padding: 0px 10px;
+      }
+
+      code {
+        color: #a5cce6;
+      }
+
+      pre code {
+        color: #bfd4e2;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      img {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+        display: block;
+      }
+
+      .column {
+        float: left;
+        padding: 5px;
+      }
+
+      .img-gallery-2 .column {
+        width: 50%;
+      }
+      
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+    </style>
+
+    <script>
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                p,
+                r
+              );
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("Tom1k0Lh0sRN7EK8LIlU5mbbmAHMBSk37lc02ZQ__38", {
+        api_host: "https://app.posthog.com",
+      });
+    </script>
+  </head>
+  <body>
+    <div class="back-btn">
+      <a href="/">← Home</a>
+    </div>
+    <main class="container" id="page-content"><h1 id="whats-the-worlds-most-efficient-language">What's the world's most efficient language?</h1>
+<p>A while ago I was sitting on a plane and in a moment of boredom picked up the in-flight magazine.</p>
+<p>The magazine had a little travel article, and it was written in English on one page and Thai on the other.</p>
+<p>The Thai version was so much shorter that I started to wonder if it was more <em>efficient</em>. In other words, was it able to convey the same exact meaning to the reader with fewer "resources" than the English version?</p>
+<p>The topic came up again when I was speaking to a Japanese man at a language exchange meetup. He said:</p>
+<blockquote>
+<p><em>"You can technically write Japanese without Kanji, but it is a lot less efficient."</em></p>
+</blockquote>
+<p>So what is language efficiency? And how can we measure it?</p>
+<h2 id="thoughts-from-a-nobody">Thoughts from a nobody</h2>
+<p>One can't find a lot resources about "language efficiency" very easily, and the majority of my findings related to spoken language. Here are two good reads on this topic for those interested:</p>
+<ul>
+<li><a href="https://www.theatlantic.com/international/archive/2016/06/complex-languages/489389/">The World’s Most Efficient Languages</a></li>
+<li><a href="https://www.economist.com/graphic-detail/2019/09/28/why-are-some-languages-spoken-faster-than-others">Why are some languages spoken faster than others?</a></li>
+</ul>
+<p>But I was interested in <em>written language</em>, simply because something in me told me I could quantify it, without any formal linguistics knowledge.</p>
+<p>As you'd imagine, quantifying the efficiency of a language is a complicated task, one that I'm not at all qualified to explore in a scientifically significant way.</p>
+<p>But I thought I'd do a little experiment.</p>
+<p>Could I gather the same text in various languages that I'm certain (as certain as you can be) conveys the exact the meaning, and then calculate from the language snippets how much information they contain?</p>
+<p>If I could do that, I could arrive at the following measure of efficiency: <code>meaning / amount of information</code>.</p>
+<p>Meaning is supposed to be a constant, thus the more information the body of text contains, the lower its "meaning per piece of information" ratio, making the language less efficient.</p>
+<p>In essence, if we take information to be <code>information = noise + signal</code>, we're looking for the signal density of languages, or, conversely, the noise ratio - how much stuff is in there that doesn't need to be?</p>
+<p>So how could I derive that information value?</p>
+<h2 id="deriving-information">Deriving information</h2>
+<p>When brainstorming about this, a few immediate indicators might come to mind, like total number of characters.</p>
+<p>Characters, however, are not very uniform - they vary widely within and across languages. Consider:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Mandarin (Simplified)</th>
+<th align="center">Finnish</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">我爱咖啡</td>
+<td align="center">Minä rakastan kahvia</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em>Both sentences say "I love coffee".</em></p>
+</blockquote>
+<p>If we're counting characters, Mandarin blows Finnish out of the water in efficiency.</p>
+<p>But most people looking at this will immediately notice that Mandarin characters are much more condensed. They make up for in "complexity" what they're missing in length.</p>
+<p>And that "complexity" is what we're looking to measure.</p>
+<p>Imagine I gave you a task to try and find a pattern in the following 2 different images. The task is "done" when you either find a pattern or decide you can't come up with one.</p>
+<p>Which would take your brain <em>more</em> time to conclude - A or B?</p>
+<table>
+<thead>
+<tr>
+<th align="center">A</th>
+<th align="center">B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="./img/language/low-info.png" alt="Low info"></td>
+<td align="center"><img src="./img/language/high-info.png" alt="High info"></td>
+</tr>
+</tbody></table>
+<p>I believe the answer would be B for most of us.</p>
+<p>B has more information, more data - in this case, non-background colored "pixels" - that our brain needs to process before it makes sense of what it is seeing.</p>
+<p>The same should hold true of characters. When reading, in order for our brain to determine the meaning of the character it is seeing (if it even knows it), it needs to take in all the pixels making up that character and run them across its "database" of known patterns to try and find a hit.</p>
+<p>So there's my information metric: pixels.</p>
+<p>To derive the amount of information present in a snippet of text, we can count the total "used" pixels i.e. on a black-on-white representation, count the black pixels.</p>
+<p>Now, at this point I will mention once again that a true analysis of efficiency should be much more nuanced, and it's not something I'd be able to undertake.</p>
+<p>In fact, a friend, upon hearing about this idea, said the only thing I'm really measuring is efficiency from the perspective of printer ink. But so be it, I'll measure that.</p>
+<h2 id="approach">Approach</h2>
+<p>This post is bound to be long, so I'll spare many of the details here. But essentially, in order to test this out, I did the following:</p>
+<p><strong>1: Selected a snippet of text that I would be likely to find good translations for in various languages</strong></p>
+<p>For this I landed on the Google Privacy Policy. And not the whole thing either. A tiny piece. So tiny that a real scientist would laugh at the idea of this whole thing even being called "an experiment".</p>
+<p>But you must keep in mind the name of this blog: "Sunday Afternoon". Stuff contained here is often done over a single weekend just for the fun of it, as was the case with this, so I needed to keep things simple.</p>
+<p>Nevertheless, I picked the Google Privacy Policy because:</p>
+<ol>
+<li>I could easily scrape it in hundreds of languages</li>
+<li>It needs to convey the exact same meaning in all languages</li>
+<li>It has legal implications, meaning if Google puts it up online in a language, it must have been thoroughly checked</li>
+<li>Google probably knows a thing or two about translations</li>
+</ol>
+<p>The exact snippet I picked was:</p>
+<blockquote>
+<p><em>"When you use our services, you’re trusting us with your information. We understand this is a big responsibility and work hard to protect your information and put you in control. This Privacy Policy is meant to help you understand what information we collect, why we collect it, and how you can update, manage, export, and delete your information."</em></p>
+</blockquote>
+<p>And I verified it said exactly this in English, Portuguese, Spanish, Finnish, German, and Icelandic (the last 2 with external help). That is, by actually reading it, other languages checked out on Google Translate.</p>
+<p><strong>2: Pull and parse the data</strong></p>
+<p>For this I got a list of all existing locales, and pulled all the HTML from each language's privacy policy from <code>https://policies.google.com/privacy?hl=&lt;locale&gt;</code>.</p>
+<p>I then found the desired paragraph and extracted it into a separate file for each language.</p>
+<p>For the more technical readers, the paragraph's CSS selector was consistent across all languages, which is how I managed to extract it. It's easy to confirm you extracted the right thing by popping the snippet into a translator.</p>
+<p><strong>3: Map out how many pixels each character takes</strong></p>
+<p>Once I had all the clean data, I iterated over every character in the dataset and drew an image for each using Python's <a href="https://pillow.readthedocs.io/en/stable/releasenotes/9.0.0.html">Pillow</a> library.</p>
+<p>From that image I could then count the total number of black pixels and generate a map of the results.</p>
+<p>Here are the basics of how this works:</p>
+<pre><code class="language-py"># Python
+
+arial_unicode = ImageFont.truetype('/Library/Fonts/Arial Unicode.ttf', 60)
+img = Image.new('RGB', (200, 200), 'white')
+
+draw = ImageDraw.Draw(img)
+draw.text((75,0), letter, font=arial_unicode, fill='#000000')
+
+pixels = list(img.getdata())
+total_black_pixels = len(list(filter(lambda rgb: sum(rgb) == 0, pixels)))
+</code></pre>
+<p><strong>4: Build up the results</strong></p>
+<p>Having determined the black pixel value (information) for each character, I could then derive how much information (again, in my limited definition), each language's written representation was using to convey the same meaning.</p>
+<blockquote>
+<p>Some manual intervention here was needed, and I ended up looking through <strong>every picture</strong> of a character that the script generated to make sure it was valid. Two key things here were removing from the results the languages for which generic squares drawn when the font didn't some or all of its characters (e.g. Amharic), as well as making sure the drawings were containing the full character.</p>
+</blockquote>
+<h2 id="results">Results</h2>
+<p>The most efficient language prize in my little child experiment was Gujarati, followed by Hebrew, and then Arabic. Gujarati and Hebrew also had some of the lowest mean pixel/character ratio in the dataset.</p>
+<p>The least efficient ones were Japanese, Malay, and Canadian French. You heard that right. Out of all the French dialects included in the dataset, Canadian was the only one with different wording. I'd be curious to hear from someone who speaks French about whether the Canadian version has words that are actually not used elsewhere or if it's just a matter of choice of words.</p>
+<p>English, by the way, was eighth on the list.</p>
+<p>Particularly interesting to me was comparing results from language/dialects in the same language group, such as the French from France vs. France from Canada comparison mentioned above. Here are a few takeaways from the results:</p>
+<p><strong>American English &gt; British English</strong></p>
+<p>American English performed slightly better than British English, and this one actually makes intuitive sense to me.</p>
+<p>In most cases when there's a variation between the two, British English tends to be the one with additional letters. Think "color" vs. "colour", "traveled" vs. "travelled", etc.</p>
+<p>These additional letters are almost decidedly redundant, inefficient. Given that there is a variation of the language without these extra letters, one can infer that they are not very important if the objective is to convey meaning efficiently.</p>
+<p>Consider the <code>r</code> in ca<strong>r</strong>t for instance. Without that <code>r</code> the word would clash with an existing word - cat, so the letter is significant in establishing meaning. The <code>u</code> in color is not, however.</p>
+<p><strong>The Chinese Language Group</strong></p>
+<p>This was a surprising one to me. Simplified Chinese was unexpectedly more efficient than Traditional Chinese, but both were beaten out by Cantonese (which also uses traditional characters).</p>
+<p>Also, if you ever wanted to put a number to the complexity of Chinese characters, they are around 3x more "complex" (pixels/char ratio) than the average of the dataset.</p>
+<p><strong>Portuguese from Brazil &gt; Portuguese from Portugal (to my utter delight)</strong></p>
+<p>When reading both sentences one can indeed notice inherent language differences, like the lack of the word "você" in Portuguese from Portugal. However, in some cases the differences were merely a word choice thing (e.g. "Entendemos" vs. "Compreendemos").</p>
+<p><strong>Spanish from Spain &gt; Spanish from Latin America</strong></p>
+<p>The biggest disparity within a language group happened with Spanish, with Spanish from Spain ranking at 14 and Latin American Spanish landing at 32. The vast majority of differences are purely arbitrary word selections, though.</p>
+<details>
+
+<summary><b>Simplified Results</b></summary>
+
+<br>
+
+<p><small>Dialects were collapsed if they used the same exact sentence.</small></p>
+<table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Language</th>
+<th>Total pixels</th>
+<th>Total chars</th>
+<th>Mean pixels/char</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Gujarati</td>
+<td>62814</td>
+<td>418</td>
+<td>150.27</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hebrew</td>
+<td>63533</td>
+<td>313</td>
+<td>202.98</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Arabic</td>
+<td>66116</td>
+<td>257</td>
+<td>257.26</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Kannada</td>
+<td>73659</td>
+<td>507</td>
+<td>145.28</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Lithuanian</td>
+<td>78828</td>
+<td>311</td>
+<td>253.47</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Thai</td>
+<td>80055</td>
+<td>333</td>
+<td>240.41</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Swedish</td>
+<td>81817</td>
+<td>343</td>
+<td>238.53</td>
+</tr>
+<tr>
+<td>8</td>
+<td>English (United States)</td>
+<td>82897</td>
+<td>345</td>
+<td>240.28</td>
+</tr>
+<tr>
+<td>9</td>
+<td>English (United Kingdom)</td>
+<td>84774</td>
+<td>351</td>
+<td>241.52</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Croatian/Bosnian</td>
+<td>85245</td>
+<td>344</td>
+<td>247.81</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Slovenian</td>
+<td>87038</td>
+<td>343</td>
+<td>253.76</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Czech</td>
+<td>88275</td>
+<td>338</td>
+<td>261.17</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Afrikaans</td>
+<td>88286</td>
+<td>364</td>
+<td>242.54</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Spanish (Spain)</td>
+<td>88551</td>
+<td>354</td>
+<td>250.14</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Bengali</td>
+<td>88585</td>
+<td>382</td>
+<td>231.9</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Slovak</td>
+<td>88887</td>
+<td>344</td>
+<td>258.39</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Polish</td>
+<td>88961</td>
+<td>346</td>
+<td>257.11</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Persian</td>
+<td>89931</td>
+<td>388</td>
+<td>231.78</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Tamil</td>
+<td>90312</td>
+<td>409</td>
+<td>220.81</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Italian</td>
+<td>91061</td>
+<td>381</td>
+<td>239.01</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Catalan</td>
+<td>91401</td>
+<td>378</td>
+<td>241.8</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Serbian</td>
+<td>91404</td>
+<td>372</td>
+<td>245.71</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Telugu</td>
+<td>92619</td>
+<td>459</td>
+<td>201.78</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Cantonese</td>
+<td>92751</td>
+<td>101</td>
+<td>918.33</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Danish</td>
+<td>92778</td>
+<td>382</td>
+<td>242.87</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Faroese</td>
+<td>92778</td>
+<td>382</td>
+<td>242.87</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Danish</td>
+<td>92778</td>
+<td>382</td>
+<td>242.87</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Estonian</td>
+<td>92868</td>
+<td>350</td>
+<td>265.34</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Urdu</td>
+<td>93788</td>
+<td>406</td>
+<td>231.0</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Punjabi</td>
+<td>93788</td>
+<td>406</td>
+<td>231.0</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Urdu</td>
+<td>93788</td>
+<td>406</td>
+<td>231.0</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Spanish (Latin America)</td>
+<td>95226</td>
+<td>376</td>
+<td>253.26</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Galician</td>
+<td>95886</td>
+<td>371</td>
+<td>258.45</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Zulu</td>
+<td>95935</td>
+<td>355</td>
+<td>270.24</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Swahili</td>
+<td>96728</td>
+<td>355</td>
+<td>272.47</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Basque</td>
+<td>97208</td>
+<td>368</td>
+<td>264.15</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Hungarian</td>
+<td>97570</td>
+<td>375</td>
+<td>260.19</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Latvian</td>
+<td>98572</td>
+<td>382</td>
+<td>258.04</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Finnish</td>
+<td>99466</td>
+<td>375</td>
+<td>265.24</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Norwegian</td>
+<td>99588</td>
+<td>415</td>
+<td>239.97</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Greek</td>
+<td>99795</td>
+<td>410</td>
+<td>243.4</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Vietnamese</td>
+<td>100035</td>
+<td>403</td>
+<td>248.23</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Portuguese (Brazil)</td>
+<td>100543</td>
+<td>391</td>
+<td>257.14</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Chinese (Simplified)</td>
+<td>100774</td>
+<td>124</td>
+<td>812.69</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Ukrainian</td>
+<td>101512</td>
+<td>357</td>
+<td>284.35</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Dutch</td>
+<td>102685</td>
+<td>399</td>
+<td>257.36</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Marathi</td>
+<td>105126</td>
+<td>394</td>
+<td>266.82</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Portuguese (Portugal)</td>
+<td>105385</td>
+<td>412</td>
+<td>255.79</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Serbian</td>
+<td>106028</td>
+<td>365</td>
+<td>290.49</td>
+</tr>
+<tr>
+<td>50</td>
+<td>Icelandic</td>
+<td>106357</td>
+<td>417</td>
+<td>255.05</td>
+</tr>
+<tr>
+<td>51</td>
+<td>Russian</td>
+<td>108623</td>
+<td>365</td>
+<td>297.6</td>
+</tr>
+<tr>
+<td>52</td>
+<td>German</td>
+<td>110538</td>
+<td>431</td>
+<td>256.47</td>
+</tr>
+<tr>
+<td>53</td>
+<td>Turkish</td>
+<td>111808</td>
+<td>444</td>
+<td>251.82</td>
+</tr>
+<tr>
+<td>54</td>
+<td>Malagasy</td>
+<td>113242</td>
+<td>471</td>
+<td>240.43</td>
+</tr>
+<tr>
+<td>55</td>
+<td>French</td>
+<td>113242</td>
+<td>471</td>
+<td>240.43</td>
+</tr>
+<tr>
+<td>56</td>
+<td>Bulgarian</td>
+<td>115494</td>
+<td>397</td>
+<td>290.92</td>
+</tr>
+<tr>
+<td>57</td>
+<td>Hindi</td>
+<td>118592</td>
+<td>500</td>
+<td>237.18</td>
+</tr>
+<tr>
+<td>58</td>
+<td>Indonesian</td>
+<td>118687</td>
+<td>418</td>
+<td>283.94</td>
+</tr>
+<tr>
+<td>59</td>
+<td>Chinese (Traditional)</td>
+<td>120295</td>
+<td>138</td>
+<td>871.7</td>
+</tr>
+<tr>
+<td>60</td>
+<td>Filipino</td>
+<td>123179</td>
+<td>456</td>
+<td>270.13</td>
+</tr>
+<tr>
+<td>61</td>
+<td>Korean</td>
+<td>124819</td>
+<td>231</td>
+<td>540.34</td>
+</tr>
+<tr>
+<td>62</td>
+<td>French (Canada)</td>
+<td>126583</td>
+<td>503</td>
+<td>251.66</td>
+</tr>
+<tr>
+<td>63</td>
+<td>Malay</td>
+<td>128355</td>
+<td>448</td>
+<td>286.51</td>
+</tr>
+<tr>
+<td>64</td>
+<td>Japanese</td>
+<td>136036</td>
+<td>215</td>
+<td>632.73</td>
+</tr>
+</tbody></table>
+</details>
+
+<p>You can find the full results in a table format on this website <a href="blog/language-information-density-results">here</a> and the CSV results <a href="https://github.com/yakkomajuri/lang/blob/main/results.csv">here</a>. These results also include the sentence in each language.</p>
+<h2 id="limitations">Limitations</h2>
+<p>The limitations of this little Sunday experiment are many. From the size of the snippet, the lack of extensive validation, to the lack of consideration for variations in writing, the use of only one font that may bias towards certain language families, etc.</p>
+<p>But perhaps the most interesting discussions regard how counting pixels may be limited as an approach to measuring efficiency and how we could measure it instead.</p>
+<p>Maybe (probably) the sheer amount of "information" is not the only factor contributing to our ability to read text efficiently?</p>
+<p>Maybe the fact that Chinese characters were originally representative drawings helps association in the brain despite the extra strokes?</p>
+<p>Maybe spaces also play a role and are thus are also a form of information?</p>
+<p>Maybe my whole approach to quantifying "information" is wrong?</p>
+<p>Either way, I'd be curious to explore this topic further, and would love to hear any thoughts others may have. Feel free to send those to <code>yakko [dot] majuri [at] protonmail [dot] com</code> if you like.</p>
+<hr>
+<h2 id="github">GitHub</h2>
+<p>You can find my loose snippets of code used for this analysis on the <a href="https://github.com/yakkomajuri/lang">yakkomajuri/lang GitHub repo</a>.</p>
+</main>
+  
+
+</body></html>
