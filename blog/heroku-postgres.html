@@ -50,7 +50,7 @@
       .img-gallery-2 .column {
         width: 50%;
       }
-      
+
       .row::after {
         content: "";
         clear: both;
@@ -126,7 +126,7 @@
 </blockquote>
 <p>So yeah, all these services out there to help you replicate a Postgres instance are out of bounds. Forget hooking Amazon DMS or Debezium to your database and letting it do the heavy lifting.</p>
 <p>The one way to bulk export data is the built-in <a href="https://devcenter.heroku.com/articles/heroku-postgres-backups">Heroku PGBackups feature</a>, but that can be pretty slow for a large DB, meaning it will probably be extremely out of sync by the time you load the data into your new instance.</p>
-<p>Ultimately, it's a hassle that can be overcome, but not without some annoyance and extra work on your end. </p>
+<p>Ultimately, it's a hassle that can be overcome, but not without some annoyance and extra work on your end.</p>
 <p>So Heroku, please, just let me be a superuser on my database.</p>
 </main>
   

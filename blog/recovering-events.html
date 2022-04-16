@@ -50,7 +50,7 @@
       .img-gallery-2 .column {
         width: 50%;
       }
-      
+
       .row::after {
         content: "";
         clear: both;
@@ -117,12 +117,12 @@
     <main class="container" id="page-content"><h1 id="recovering-a-customers-events">Recovering a customer's events</h1>
 <p>Here's a short post of a recent occurence just to get kickback into the habit about documenting debugging sessions and writing about software in general. Hopefully I'll cover some nastier stuff in upcoming pieces.</p>
 <p>Just the other day I had a session booked in my calendar that was gearing up to be painful.</p>
-<p>A customer who deployed our software had found out an important piece of their instance had started having some issues <em>a while back</em>, so they hadn't ingested any events (data) for about a month. </p>
+<p>A customer who deployed our software had found out an important piece of their instance had started having some issues <em>a while back</em>, so they hadn't ingested any events (data) for about a month.</p>
 <p>Leaving aside the details regarding why this happened and why it wasn't noticed earlier, what then happened is that we realized the customer still had a good amount of the data in Kafka (~10 days worth) and they wanted to restore it.</p>
 <p>Enter me. I was the one who would help them restore this data - meaning I'd jump on a call with an engineer from their side and figure this out.</p>
-<p>The reason this is painful is that you can't just move fast and run commands yourself to try things out. You have to convey to the person on the other side of the screen, accurately, what should be done next. </p>
+<p>The reason this is painful is that you can't just move fast and run commands yourself to try things out. You have to convey to the person on the other side of the screen, accurately, what should be done next.</p>
 <p>"Now run '<em>cube control config use context</em>'. Oh sorry, that's '<em>use context</em>' with an underscore, I mean dash. Argh!"</p>
-<p>Anyway, we got started and the approach seemed clear. </p>
+<p>Anyway, we got started and the approach seemed clear.</p>
 <p>For anyone else that is not future me reading this post, I'll provide just a bit of context.</p>
 <p>Our product runs two key servers. The first one I'll call the Django server, and the second is called the plugin server.</p>
 <p>The plugin server, however, is not just that. In reality, it's more like "the ingestion server". So, to ingest data, an endpoint is hit on the Django server, which does a bit of validation on the payload, and then pops it into Kafka.</p>
@@ -144,11 +144,11 @@
 <p>The plugin server crashed.</p>
 <p>We scale the plugins service pod down and up again, and it crashes once more.</p>
 <p>This is strange - the plugin server does a lot in worker threads, and an exception thrown in those wouldn't normally cause the server to crash. It also generally has pretty good error handling. Plus, why can't it even start up again?</p>
-<p>Making a short story shorter, turns out exactly <em>one</em> of the JSON payloads was invalid, and the plugin server runs the Kafka consumer in the main thread, from where it distributes the ingestion work to the workers. </p>
+<p>Making a short story shorter, turns out exactly <em>one</em> of the JSON payloads was invalid, and the plugin server runs the Kafka consumer in the main thread, from where it distributes the ingestion work to the workers.</p>
 <p>And while this is a service that's reasonably resilient, it didn't handle the case where a payload from Kafka contained invalid JSON. This is usually fine because that topic is only produced to from the Django server, which <em>does do</em> JSON validation. However, when one produces to the topic directly, that validation is bypassed.</p>
 <p>So now the Kafka topic is poisoned, and the plugin server won't start back up, since it can't commit the offset for the consumer group, and tries to consume the same message each time it starts up.</p>
 <p>Ultimately, we found the invalid payload with a little Python script, and exec'd into the Kafka pod to manually move the consumer group offset forward.</p>
-<p>With the offset now beyond the broken payload, the service got healthy again, and we were able to produce the data with no problems. </p>
+<p>With the offset now beyond the broken payload, the service got healthy again, and we were able to produce the data with no problems.</p>
 <p>Any potential duplicates produced would be handled by the table engine and collapsed appropriately based on the payload UUIDs.</p>
 <p>That was that. The customer got their data back and we moved on with our days.</p>
 <hr>
