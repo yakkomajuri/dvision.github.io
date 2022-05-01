@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Can you tell me the age of my users?</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <script type="text/javascript" src="js/newsletter.js"></script>
     <style>
       h1 {
         margin-top: 20px;
@@ -107,6 +109,7 @@
       })(document, window.posthog || []);
       posthog.init("phc_m8vWS24RZtbuGwKTYrVMA0B1wgKNrwKzsrqBwQsQUd9", {
         api_host: "https://p.yakkomajuri.com",
+        persistence: 'memory' 
       });
     </script>
   </head>
@@ -137,6 +140,20 @@
 <p><em>Please note that I'm a very biased source. I work for PostHog, a company that isn't a direct competitor to Google Analytics per se, but also kind of is.</em></p>
 <p><em>But my argument here is that, as long as you're compliant with local laws, you could switch to a cloud-based service like Mixpanel or Amplitude and it'd still be an improvement. Even though, as you'd expect, I'm an advocate for self-hosted analytics.</em></p>
 </main>
+
+    <div class="container">
+      <hr>
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+    </div>
+
+    <br>
   
 
 </body></html>

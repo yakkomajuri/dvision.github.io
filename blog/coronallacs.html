@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hiking around Andorra in 5 days</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <script type="text/javascript" src="js/newsletter.js"></script>
     <style>
       h1 {
         margin-top: 20px;
@@ -107,6 +109,7 @@
       })(document, window.posthog || []);
       posthog.init("phc_m8vWS24RZtbuGwKTYrVMA0B1wgKNrwKzsrqBwQsQUd9", {
         api_host: "https://p.yakkomajuri.com",
+        persistence: 'memory' 
       });
     </script>
   </head>
@@ -357,6 +360,20 @@
 <p>If you're planning on doing the Coronallacs and have some questions, I'd be happy to <em>try</em> and help. Feel free to reach out to me at <code>yakkomajuri [at] protonmail [dot] com</code>.</p>
 <p>Oh, and the final thing I just remembered and forgot to include in the main body of text. I saw some marmots on the trail a few times. They're pretty cute.</p>
 </main>
+
+    <div class="container">
+      <hr>
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+    </div>
+
+    <br>
   
 
 </body></html>

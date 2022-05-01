@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Why I'm comfortable publishing foolishness</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <script type="text/javascript" src="js/newsletter.js"></script>
     <style>
       h1 {
         margin-top: 20px;
@@ -107,6 +109,7 @@
       })(document, window.posthog || []);
       posthog.init("phc_m8vWS24RZtbuGwKTYrVMA0B1wgKNrwKzsrqBwQsQUd9", {
         api_host: "https://p.yakkomajuri.com",
+        persistence: 'memory' 
       });
     </script>
   </head>
@@ -137,6 +140,20 @@
 <p>Yes, the posts of mine that get the most traction are those where I know very well what I'm talking about. But it's not fun to just stick to those. Plus traction on this blog here is just an ego metric - it's not like I make money out of it.</p>
 <p>And, finally, I also hold the belief that <em>everyone</em> has <em>something</em> to add to <em>any</em> discussion. So there you go, you'll certainly be hearing my bit.</p>
 </main>
+
+    <div class="container">
+      <hr>
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+    </div>
+
+    <br>
   
 
 </body></html>

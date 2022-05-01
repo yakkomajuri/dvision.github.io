@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
     <link rel="stylesheet" href="main.css">
+    <script type="text/javascript" src="js/newsletter.js"></script>
 
     <style>
       details p {
@@ -82,6 +83,7 @@
       })(document, window.posthog || []);
       posthog.init("phc_m8vWS24RZtbuGwKTYrVMA0B1wgKNrwKzsrqBwQsQUd9", {
         api_host: "https://p.yakkomajuri.com",
+        persistence: 'memory' 
       });
     </script>
   </head>
@@ -112,6 +114,16 @@
 <p>I wish I could somehow - write them all.</p>
 </div>
 
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+
+      <br>
       <div style="text-align: center">
         <small>Built with
           <b><a href="https://github.com/yakkomajuri/teeny" target="_blank">Teeny</a></b></small>

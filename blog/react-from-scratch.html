@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Building a modern react app from scratch</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <script type="text/javascript" src="js/newsletter.js"></script>
     <style>
       h1 {
         margin-top: 20px;
@@ -107,6 +109,7 @@
       })(document, window.posthog || []);
       posthog.init("phc_m8vWS24RZtbuGwKTYrVMA0B1wgKNrwKzsrqBwQsQUd9", {
         api_host: "https://p.yakkomajuri.com",
+        persistence: 'memory' 
       });
     </script>
   </head>
@@ -500,6 +503,20 @@ export const counterLogic =
 <p>If you've gotten all the way down here, hopefully you've come out of it with a shiny new React app, a modern boilerplate, and some additional knowledge. Honestly, this is just me documenting a bit of my learning process, but hopefully you got something out of it too!</p>
 <p>If you have any feedback or suggestions, feel free to open an issue for it.</p>
 </main>
+
+    <div class="container">
+      <hr>
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+    </div>
+
+    <br>
   
 
 </body></html>
