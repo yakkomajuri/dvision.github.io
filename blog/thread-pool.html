@@ -5,8 +5,10 @@
     <title>Deep diving into the thread pool: a debugging story</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
-    <link rel="stylesheet" href="../css/main.css">
     <script type="text/javascript" src="../js/newsletter.js"></script>
+
+    <link rel="stylesheet" href="../highlight/nord.min.css">
+    <script type="text/javascript" src="../highlight/highlight.min.js"></script>
 
     <style>
       h1 {
@@ -23,6 +25,10 @@
         padding: 0px 10px;
       }
 
+      pre > code {
+        font-family: monospace;
+        font-size: 16px;
+      }
 
       .container {
         max-width: 800px;
@@ -56,6 +62,7 @@
     </style>
 
     <script>
+      hljs.highlightAll();
       !(function (t, e) {
         var o, n, p, r;
         e.__SV ||
