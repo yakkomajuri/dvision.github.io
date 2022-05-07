@@ -5,7 +5,9 @@
     <title>Recovering a customer's events</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
-    <script type="text/javascript" src="js/newsletter.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="text/javascript" src="../js/newsletter.js"></script>
+
     <style>
       h1 {
         margin-top: 20px;
@@ -21,13 +23,6 @@
         padding: 0px 10px;
       }
 
-      code {
-        color: #a5cce6;
-      }
-
-      pre code {
-        color: #bfd4e2;
-      }
 
       .container {
         max-width: 800px;
@@ -117,7 +112,8 @@
     <div class="back-btn">
       <a href="/">← Home</a>
     </div>
-    <main class="container" id="page-content"><h1 id="recovering-a-customers-events">Recovering a customer's events</h1>
+    <main class="container">
+      <section id="page-content"><h1 id="recovering-a-customers-events">Recovering a customer's events</h1>
 <p>Here's a short post of a recent occurence just to get kickback into the habit about documenting debugging sessions and writing about software in general. Hopefully I'll cover some nastier stuff in upcoming pieces.</p>
 <p>Just the other day I had a session booked in my calendar that was gearing up to be painful.</p>
 <p>A customer who deployed our software had found out an important piece of their instance had started having some issues <em>a while back</em>, so they hadn't ingested any events (data) for about a month.</p>
@@ -160,7 +156,9 @@
 <li>Get better at regex</li>
 <li>Always add handling for invalid payloads</li>
 </ul>
-</main>
+</section>
+
+    </main>
 
     <div class="container">
       <hr>

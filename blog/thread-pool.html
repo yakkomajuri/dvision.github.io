@@ -5,7 +5,9 @@
     <title>Deep diving into the thread pool: a debugging story</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
-    <script type="text/javascript" src="js/newsletter.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="text/javascript" src="../js/newsletter.js"></script>
+
     <style>
       h1 {
         margin-top: 20px;
@@ -21,13 +23,6 @@
         padding: 0px 10px;
       }
 
-      code {
-        color: #a5cce6;
-      }
-
-      pre code {
-        color: #bfd4e2;
-      }
 
       .container {
         max-width: 800px;
@@ -117,7 +112,8 @@
     <div class="back-btn">
       <a href="/">← Home</a>
     </div>
-    <main class="container" id="page-content"><h1 id="deep-diving-into-the-thread-pool-a-debugging-story">Deep diving into the thread pool: a debugging story</h1>
+    <main class="container">
+      <section id="page-content"><h1 id="deep-diving-into-the-thread-pool-a-debugging-story">Deep diving into the thread pool: a debugging story</h1>
 <p>Some months ago I found myself with the following issue in my sprint priorities:</p>
 <p><a href="https://github.com/PostHog/bigquery-plugin/issues/10">"BigQuery is very flakey on local / self-hosted"</a></p>
 <p>Keeping context to a minimum, we run an open source analytics platform that you can self-host, and there are plugins to help you send data out of the platform and into other tools, of which BigQuery is one of them.</p>
@@ -152,7 +148,7 @@
 <p><img src="https://user-images.githubusercontent.com/38760734/123465219-3a19ae80-d5c4-11eb-857c-588c31a33262.png" alt="flamegraph"></p>
 <p>Hm, what's <code>atomicsWaitLoop</code>?</p>
 <p>I went to the Piscina repo and there was the answer:</p>
-<pre><code>function atomicsWaitLoop (port : MessagePort, sharedBuffer : Int32Array) {
+<pre><code class="language-js">function atomicsWaitLoop (port : MessagePort, sharedBuffer : Int32Array) {
   if (!useAtomics) return;
 
   // This function is entered either after receiving the startup message, or
@@ -223,7 +219,9 @@
 <p>And so, that's how we kept our performance intact without touching the voided promises.</p>
 <hr>
 <p><em><a href="https://github.com/PostHog/plugin-server/issues/487">Here's the original ticket</a> where this was explained and a discussion about possibilities took place</em>.</p>
-</main>
+</section>
+
+    </main>
 
     <div class="container">
       <hr>

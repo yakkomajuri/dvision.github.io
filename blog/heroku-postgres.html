@@ -5,7 +5,9 @@
     <title>Be careful with Heroku Postgres</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
-    <script type="text/javascript" src="js/newsletter.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="text/javascript" src="../js/newsletter.js"></script>
+
     <style>
       h1 {
         margin-top: 20px;
@@ -21,13 +23,6 @@
         padding: 0px 10px;
       }
 
-      code {
-        color: #a5cce6;
-      }
-
-      pre code {
-        color: #bfd4e2;
-      }
 
       .container {
         max-width: 800px;
@@ -117,7 +112,8 @@
     <div class="back-btn">
       <a href="/">← Home</a>
     </div>
-    <main class="container" id="page-content"><h1 id="be-careful-with-heroku-postgres">Be careful with Heroku Postgres</h1>
+    <main class="container">
+      <section id="page-content"><h1 id="be-careful-with-heroku-postgres">Be careful with Heroku Postgres</h1>
 <p>This will be a short one. Just a quick <em>lil'</em> rant.</p>
 <p>Heroku is a great platform for starting out a project. You can get up and running quickly, and it's extremely easy to add in valuable services (via Heroku add-ons) as well as scaling up and down.</p>
 <p>As a result, it's often a good pick for early-stage startups. A lot of the architecture woes are handled for you, so you can spend more time on your product, and still scale fast if you happen to hit the front page of HackerNews or something.</p>
@@ -131,7 +127,9 @@
 <p>The one way to bulk export data is the built-in <a href="https://devcenter.heroku.com/articles/heroku-postgres-backups">Heroku PGBackups feature</a>, but that can be pretty slow for a large DB, meaning it will probably be extremely out of sync by the time you load the data into your new instance.</p>
 <p>Ultimately, it's a hassle that can be overcome, but not without some annoyance and extra work on your end.</p>
 <p>So Heroku, please, just let me be a superuser on my database.</p>
-</main>
+</section>
+
+    </main>
 
     <div class="container">
       <hr>
