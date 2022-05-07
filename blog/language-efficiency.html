@@ -120,7 +120,9 @@
       <a href="/">← Home</a>
     </div>
     <main class="container">
-      <section id="page-content"><h1 id="whats-the-worlds-most-efficient-language">What's the world's most efficient language?</h1>
+      <section class="blog-section">
+        <div class="progress-bar"></div>
+        <div id="page-content"><h1 id="whats-the-worlds-most-efficient-language">What's the world's most efficient language?</h1>
 <p><em>23/01/2022</em></p>
 <hr>
 <br>
@@ -729,7 +731,9 @@ total_black_pixels = len(list(filter(lambda rgb: sum(rgb) == 0, pixels)))
 <hr>
 <h2 id="github">GitHub</h2>
 <p>You can find my loose snippets of code used for this analysis on the <a href="https://github.com/yakkomajuri/lang">yakkomajuri/lang GitHub repo</a>.</p>
-</section>
+</div>
+
+      </section>
 
     </main>
 
@@ -746,6 +750,9 @@ total_black_pixels = len(list(filter(lambda rgb: sum(rgb) == 0, pixels)))
     </div>
 
     <br>
+
+    <link rel="stylesheet" href="../progress/progress.css">
+    <script type="text/javascript" src="../progress/progress.js"></script>
 
     <script src="https://utteranc.es/client.js" repo="yakkomajuri/yakkomajuri.github.io" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async=""></script>
   

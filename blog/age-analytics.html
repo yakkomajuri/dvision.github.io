@@ -120,7 +120,9 @@
       <a href="/">← Home</a>
     </div>
     <main class="container">
-      <section id="page-content"><h1 id="can-you-tell-me-the-age-of-my-users">Can you tell me the age of my users?</h1>
+      <section class="blog-section">
+        <div class="progress-bar"></div>
+        <div id="page-content"><h1 id="can-you-tell-me-the-age-of-my-users">Can you tell me the age of my users?</h1>
 <p>I once had an onboarding call with a client where I was asked:</p>
 <blockquote>
 <p><em>"Can you tell me the age of my users?"</em></p>
@@ -142,7 +144,9 @@
 
 <p><em>Please note that I'm a very biased source. I work for PostHog, a company that isn't a direct competitor to Google Analytics per se, but also kind of is.</em></p>
 <p><em>But my argument here is that, as long as you're compliant with local laws, you could switch to a cloud-based service like Mixpanel or Amplitude and it'd still be an improvement. Even though, as you'd expect, I'm an advocate for self-hosted analytics.</em></p>
-</section>
+</div>
+
+      </section>
 
     </main>
 
@@ -159,6 +163,9 @@
     </div>
 
     <br>
+
+    <link rel="stylesheet" href="../progress/progress.css">
+    <script type="text/javascript" src="../progress/progress.js"></script>
 
     <script src="https://utteranc.es/client.js" repo="yakkomajuri/yakkomajuri.github.io" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async=""></script>
   

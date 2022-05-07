@@ -120,7 +120,9 @@
       <a href="/">← Home</a>
     </div>
     <main class="container">
-      <section id="page-content"><h1 id="be-careful-with-heroku-postgres">Be careful with Heroku Postgres</h1>
+      <section class="blog-section">
+        <div class="progress-bar"></div>
+        <div id="page-content"><h1 id="be-careful-with-heroku-postgres">Be careful with Heroku Postgres</h1>
 <p>This will be a short one. Just a quick <em>lil'</em> rant.</p>
 <p>Heroku is a great platform for starting out a project. You can get up and running quickly, and it's extremely easy to add in valuable services (via Heroku add-ons) as well as scaling up and down.</p>
 <p>As a result, it's often a good pick for early-stage startups. A lot of the architecture woes are handled for you, so you can spend more time on your product, and still scale fast if you happen to hit the front page of HackerNews or something.</p>
@@ -134,7 +136,9 @@
 <p>The one way to bulk export data is the built-in <a href="https://devcenter.heroku.com/articles/heroku-postgres-backups">Heroku PGBackups feature</a>, but that can be pretty slow for a large DB, meaning it will probably be extremely out of sync by the time you load the data into your new instance.</p>
 <p>Ultimately, it's a hassle that can be overcome, but not without some annoyance and extra work on your end.</p>
 <p>So Heroku, please, just let me be a superuser on my database.</p>
-</section>
+</div>
+
+      </section>
 
     </main>
 
@@ -151,6 +155,9 @@
     </div>
 
     <br>
+
+    <link rel="stylesheet" href="../progress/progress.css">
+    <script type="text/javascript" src="../progress/progress.js"></script>
 
     <script src="https://utteranc.es/client.js" repo="yakkomajuri/yakkomajuri.github.io" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async=""></script>
   
