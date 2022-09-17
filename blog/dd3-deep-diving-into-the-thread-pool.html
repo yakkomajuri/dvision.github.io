@@ -1,0 +1,220 @@
+<html lang="en" data-theme="dark"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging Debrief #2: Deep diving into the thread pool</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <script type="text/javascript" src="../js/newsletter.js"></script>
+
+    <link rel="stylesheet" href="../highlight/nord.min.css">
+    <script type="text/javascript" src="../highlight/highlight.min.js"></script>
+
+    <style>
+      h1 {
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 20;
+        top: 20;
+      }
+
+      blockquote {
+        padding: 0px 10px;
+      }
+
+      pre > code {
+        font-family: monospace;
+        font-size: 16px;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      img {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+        display: block;
+      }
+
+      .column {
+        float: left;
+        padding: 5px;
+      }
+
+      .img-gallery-2 .column {
+        width: 50%;
+      }
+
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+    </style>
+
+    <script>
+      hljs.highlightAll();
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                p,
+                r
+              );
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("Tom1k0Lh0sRN7EK8LIlU5mbbmAHMBSk37lc02ZQ__38", {
+        api_host: "https://p.yakkos.workers.dev",
+        persistence: "memory",
+      });
+    </script>
+  </head>
+  <body>
+    <div class="back-btn">
+      <a href="/">← Home</a>
+    </div>
+    <main class="container">
+      <section class="blog-section">
+        <div class="progress-bar"></div>
+        <div id="page-content"><h1 id="debugging-debrief-2-deep-diving-into-the-thread-pool">Debugging Debrief #2: Deep diving into the thread pool</h1>
+<blockquote>
+<p><small>This piece is a part of my <em>Debugging Debrief</em> series, which includes writeups of tracking down and fixing bugs. My goal is that this series motivates me to write about software more often, so I can kick back into the habit, reinforce my learnings through the writing, and refer back to these posts in the future.</small></p>
+</blockquote>
+<p>Some months ago I found myself with the following issue in my sprint priorities:</p>
+<p><a href="https://github.com/PostHog/bigquery-plugin/issues/10">"BigQuery is very flakey on local / self-hosted"</a></p>
+<p>Keeping context to a minimum, we run an open source analytics platform that you can self-host, and there are plugins to help you send data out of the platform and into other tools, of which BigQuery is one of them.</p>
+<p>Now, two weeks or so before the sprint at hand, a customer who was using the BigQuery plugin on their self-hosted instance reported seeing a lot of errors on the plugin's logs, saying something about execution having timed out.</p>
+<p>Plugins can run tasks that last up to 30 seconds at a time, and it seemed inserts to BigQuery were taking more than that to complete. </p>
+<p>Even worse, it seemed that somehow some inserts were succeeding despite throwing the error, which caused us to export duplicates as our retry logic was triggered.</p>
+<p>Plus, to top it off, this was reportedly happening on local Postgres-backed deployments and self-hosted ClickHouse-backed instances, but not on our ClickHouse-backed Cloud instance. What?</p>
+<p>And so, back to my sprint goals. Having read all the context I could find, it seemed the consensus until now was that BigQuery was at fault here. </p>
+<p>However, I was a bit skeptical. I had been working on building plugins, and just the week before I had encountered similar cryptic errors while working on another plugin.</p>
+<p>I originally shrugged them off, but the light bulb went on as soon as I read the issue about the BigQuery plugin. </p>
+<p>Something deeper was going on.</p>
+<h2 id="the-util-shuffle">The util shuffle</h2>
+<p>While the BigQuery plugin didn't seem to be the only one affected, it could potentially give me some insight into what's happening. </p>
+<p>I started running it while inspecting the code, and something quickly became clear: we'd regularly throw errors on the first insert attempt, but never on retries.</p>
+<p>What could be different here?</p>
+<p>Bingo! The buffer.</p>
+<p>Our plugins have a few options when it comes to asynchronous processing, primarily the jobs API and the buffer util.</p>
+<p>The BigQuery plugin used the buffer on the first insert attempt, but leveraged jobs to process retries.</p>
+<p>Given that the problem seemed to only occur on the first run, it seemed that the buffer was to blame. </p>
+<h2 id="beyond-a-reasonable-doubt">Beyond a reasonable doubt</h2>
+<p>Ok, so the buffer seemed to be the problem, but this needed to be confirmed.</p>
+<p>As such, I setup a plugin that used both a buffer and a job to call the same async function that made a request to an endpoint that'd always wait 5s before responding, and timed the performance of the two.</p>
+<p>The job always executed in around the same amount of time, but the buffer would vary a lot:</p>
+<p><img src="https://user-images.githubusercontent.com/38760734/123464398-1efa6f00-d5c3-11eb-86a4-612fd36d0d3a.png" alt="logs"></p>
+<p>I went through thousands of runs, and the job was always consistent. The buffer would vary from 5s to 29s and then came the timeouts.</p>
+<p>So the buffer was the problem. But finding out why was where my beard hairs started to come out.</p>
+<p>I started to notice connection reset, socket hang up, and other sorts of errors. I knew the request would only take 5s, so there were 25s to spare. This made no sense, and so my hunch was that this a problem lower down.</p>
+<h2 id="🔥">🔥</h2>
+<p>At this point I spent hours looking a Node.js and Piscina (our thread pool) docs and testing out different config options, but I wasn't going anywhere.</p>
+<p>So finally I decided to run the plugin server with a flamegraph tool called <a href="https://github.com/davidmarkclements/0x">0x</a>.</p>
+<p>And <em>that</em> looked like <em>this</em>:</p>
+<p><img src="https://user-images.githubusercontent.com/38760734/123465219-3a19ae80-d5c4-11eb-857c-588c31a33262.png" alt="flamegraph"></p>
+<p>Hm, what's <code>atomicsWaitLoop</code>?</p>
+<p>w
+I went to the Piscina repo and there was the answer:</p>
+<pre><code>function atomicsWaitLoop (port : MessagePort, sharedBuffer : Int32Array) {
+  if (!useAtomics) return;
+
+  // This function is entered either after receiving the startup message, or
+  // when we are done with a task. In those situations, the *only* thing we
+  // expect to happen next is a 'message' on `port`.
+  // That call would come with the overhead of a C++ → JS boundary crossing,
+  // including async tracking. So, instead, if there is no task currently
+  // running, we wait for a signal from the parent thread using Atomics.wait(),
+  // and read the message from the port instead of generating an event,
+  // in order to avoid that overhead.
+  // The one catch is that this stops asynchronous operations that are still
+  // running from proceeding. Generally, tasks should not spawn asynchronous
+  // operations without waiting for them to finish, though.
+  
+  ...
+}
+</code></pre>
+<p>Oh.</p>
+<blockquote>
+<p>"Generally, tasks should not spawn asynchronous operations without waiting for them to finish, though."</p>
+</blockquote>
+<p>That's exactly what the buffer does!</p>
+<p>So we were doing something our thread pool recommended against. That probably was it. But we did this across the board! How come this error didn't happen on Cloud but happened on self-hosted.</p>
+<p>As it turns out, the error <em>did</em> happen on Cloud, but very infrequently. It was also merged in with other legitimate timeouts on Sentry, which made it hard to spot.</p>
+<p>But that still wasn't it. What is <em>really</em> happening and how can we fix it? </p>
+<h2 id="never-block-the-event-loop">Never block the event loop</h2>
+<p>The golden rule in the JavaScript ecosystem is <a href="https://nodejs.org/en/docs/guides/dont-block-the-event-loop/">"don't block the event loop"</a>.</p>
+<p>The event loop is JavaScript's approach to asynchronous operations in a single-threaded environment. </p>
+<p>It is much better explained by <a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/">others</a>, so I'll refrain from covering it here.</p>
+</div>
+
+      </section>
+
+    </main>
+
+    <div class="container">
+      <hr>
+      <br>
+      <div style="margin: auto; display: block; text-align: center">
+        <p>Subscribe to my newsletter:</p>
+        <input id="newsletter-subscribe-input" style="display: inline-block; width: 80%; margin: 0" placeholder="foo@bar.com">
+        <button id="newsletter-subscribe-btn" style="display: inline-block; width: 40; margin-left: -52; padding: 5" onclick="newsletterSubscribe()">
+          →
+        </button>
+      </div>
+    </div>
+
+    <br>
+
+    <link rel="stylesheet" href="../progress/progress.css">
+    <script type="text/javascript" src="../progress/progress.js"></script>
+
+    <script src="https://utteranc.es/client.js" repo="yakkomajuri/yakkomajuri.github.io" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async=""></script>
+  
+
+</body></html>
